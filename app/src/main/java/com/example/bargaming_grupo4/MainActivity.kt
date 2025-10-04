@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
-                    )c
+                    )
             }
         }
     }
@@ -43,4 +43,5 @@ fun GreetingPreview() {
     BarGaming_Grupo4Theme {
         Greeting("Android")
     }
+}
 }

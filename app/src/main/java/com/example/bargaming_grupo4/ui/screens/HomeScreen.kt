@@ -14,10 +14,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.bargaming_grupo4.R
+import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreenCompact() {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(text = "BarGaming App") })
@@ -50,4 +51,10 @@ fun HomeScreen() {
             )
         }
     }
+}
+
+@Preview(name = "Compact", widthDp = 360, heightDp = 800)
+@Composable
+fun PreviewCompact(){
+    HomeScreenCompact()
 }
