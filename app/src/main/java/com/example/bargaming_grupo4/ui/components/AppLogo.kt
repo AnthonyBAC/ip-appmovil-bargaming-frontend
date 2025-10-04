@@ -8,3 +8,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.size
 import com.example.bargaming_grupo4.R
 
+@Composable
+fun AppLogo(modifier: Modifier = Modifier) {
+    Image(painter = painterResource(R.drawable.logo),
+        contentDescription = "Logo App",
+        modifier = modifier.size(120.dp))
+}
