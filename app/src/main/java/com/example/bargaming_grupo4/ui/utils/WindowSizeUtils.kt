@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 @Composable
 fun obtenerWindowSizeClass(): WindowSizeClass {
     val context = LocalContext.current
-    val activity = context as? Activity ?: throw IllegalStateException("No se pudo obtener la Activity actual")
+    val activity = context as? Activity
+        ?: throw IllegalStateException("No se pudo obtener la Activity actual")
     return calculateWindowSizeClass(activity)
 }
