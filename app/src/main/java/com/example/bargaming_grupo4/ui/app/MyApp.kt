@@ -6,5 +6,13 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun MyApp(windowSizeClass: WindowSizeClass){
-    when (windowSizeClass.)
+    when (windowSizeClass.widthSizeClass){
+        WindowWidthSizeClass.Compact -> CompactApp()
+
+        // ----------------------
+        // Estas no se ocuparan aun
+        //WindowWidthSizeClass.Medium -> MediumApp()
+        // WindowWidthSizeClass.Expanded -> ExpandedApp()
+        else -> CompactApp()
+    }
 }

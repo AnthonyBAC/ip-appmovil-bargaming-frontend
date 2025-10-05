@@ -1,16 +1,23 @@
+# IDE & OS
 *.iml
-.gradle
-/local.properties
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/dictionaries
 /.idea/caches
 /.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
 .DS_Store
+
+# Build
 /build
 /captures
-.externalNativeBuild
-.cxx
-local.properties
-.idea/
+
+# Archivos locales
+/local.properties
+
+# Gradle cache (pero dejar wrapper)
+.gradle/
+!gradlew
+!gradlew.bat
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
