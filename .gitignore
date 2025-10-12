@@ -1,11 +1,9 @@
-# IDE & OS
-*.iml
-/.idea/workspace.xml
-/.idea/tasks.xml
-/.idea/dictionaries
-/.idea/caches
-/.idea/libraries
+# macOS
 .DS_Store
+
+# Android Studio
+.idea/
+*.iml
 
 # Build
 /build
