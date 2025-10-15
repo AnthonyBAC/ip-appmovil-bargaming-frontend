@@ -1,44 +1,94 @@
 package com.example.bargaming_grupo4.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.bargaming_grupo4.ui.screens.WelcomeScreen
+import kotlinx.coroutines.launch
+
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.runtime.rememberCoroutineScope
+import com.example.bargaming_grupo4.ui.components.AppBottomBar
+import com.example.bargaming_grupo4.ui.components.AppDrawer
+import com.example.bargaming_grupo4.ui.components.defaultDrawerItems
 import com.example.bargaming_grupo4.ui.screens.HomeScreen
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bargaming_grupo4.ui.screens.LoginScreen
-import com.example.bargaming_grupo4.ui.screens.RegistroScreen
-import com.example.bargaming_grupo4.viewmodel.UsuarioViewModel
+import com.example.bargaming_grupo4.ui.screens.RegisterScreen
+import com.example.bargaming_grupo4.ui.screens.WelcomeScreen
 
 @Composable
-fun AppNavGraph() {
-    val navController = rememberNavController()
+fun AppNavGraph(navController: NavHostController) {
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    val usuarioViewModel: UsuarioViewModel = viewModel()
-    NavHost(navController = navController, startDestination = "welcome") {
-        composable("welcome") {
-            WelcomeScreen(
-                modifier = Modifier.fillMaxSize(),
-                navController = navController
+    val goHome: () -> Unit = { navController.navigate(Route.Home.path) }
+    val goLogin: () -> Unit = { navController.navigate(Route.Login.path) }
+    val goRegister: () -> Unit = { navController.navigate(Route.Register.path) }
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            AppDrawer(
+                currentRoute = null,
+                items = defaultDrawerItems(
+                    onHome = {
+                        scope.launch { drawerState.close() }
+                        goHome()
+                    },
+                    onLogin = {
+                        scope.launch { drawerState.close() }
+                        goLogin()
+                    },
+                    onRegister = {
+                        scope.launch { drawerState.close() }
+                        goRegister()
+                    }
+                )
             )
         }
-        composable("home") {
-            HomeScreen(
-                navController, modifier = Modifier.fillMaxSize()
-            )
-        }
-        composable("login") {
-            LoginScreen(
-                navController, usuarioViewModel
-            )
-        }
-        composable("registro") {
-            RegistroScreen(
-                navController, usuarioViewModel
-            )
+    ) {
+        Scaffold(
+            bottomBar = {
+                AppBottomBar(
+                    onHome = goHome,
+                    onLogin = goLogin,
+                    onRegister = goRegister
+                )
+            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Route.Welcome.path,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(Route.Welcome.path) {
+                    WelcomeScreen(Modifier.fillMaxSize(), navController)
+                }
+                composable(Route.Home.path) {
+                    HomeScreen(
+                        onGoLogin = goLogin,
+                        onGoRegister = goRegister
+                    )
+                }
+                composable(Route.Login.path) {
+                    LoginScreen(
+                        onLoginOk = goHome,
+                        onGoRegister = goRegister
+                    )
+                }
+                composable(Route.Register.path) {
+                    RegisterScreen(
+                        onRegistered = goLogin,
+                        onGoLogin = goLogin
+                    )
+                }
+            }
         }
     }
 }

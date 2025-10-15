@@ -20,11 +20,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginScreen(
-    onLoginOk: () -> Unit,   // Acción para “volver” a Home
-    onGoRegister: () -> Unit // Acción para ir a Registro
+fun RegisterScreen(
+    onRegistered: () -> Unit, // Acción para ir a Login
+    onGoLogin: () -> Unit     // Acción alternativa a Login
 ) {
-    val bg = MaterialTheme.colorScheme.secondaryContainer // Fondo distinto para contraste
+    val bg = MaterialTheme.colorScheme.tertiaryContainer // Fondo único
 
     Box(
         modifier = Modifier
@@ -33,24 +33,22 @@ fun LoginScreen(
             .padding(16.dp), // Margen
         contentAlignment = Alignment.Center // Centro
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally // Centrado horizontal
-        ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) { // Estructura vertical
             Text(
-                text = "Login",
+                text = "Registro",
                 style = MaterialTheme.typography.headlineSmall // Título
             )
             Spacer(Modifier.height(12.dp)) // Separación
             Text(
-                text = "Pantalla de Login (demo). Usa la barra superior, el menú lateral o los botones.",
-                textAlign = TextAlign.Center // Alineación centrada
+                text = "Pantalla de Registro (demo). Practica navegación con botones.",
+                textAlign = TextAlign.Center // Centra el texto
             )
             Spacer(Modifier.height(20.dp)) // Separación
 
-            // Fila de botones para practicar Row
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) { // Espaciado
-                Button(onClick = onLoginOk) { Text("Ir a Home") } // Navega a Home
-                OutlinedButton(onClick = onGoRegister) { Text("Ir a Registro") } // A Registro
+            // Botones con Row para variar la composición
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) { // Espacio entre botones
+                Button(onClick = onRegistered) { Text("Ir a Login") } // Navega a Login
+                OutlinedButton(onClick = onGoLogin) { Text("Volver a Login") } // También a Login
             }
         }
     }
