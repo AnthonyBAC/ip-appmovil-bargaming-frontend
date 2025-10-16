@@ -26,9 +26,8 @@ fun WelcomeScreen(
         Text("Bienvenido a BarGaming")
     }
 
-    // Navegación automática después de 3 segundos
     LaunchedEffect(Unit) {
-        delay(3000L)
+        delay(2000L)
         navController.navigate("home") {
             popUpTo("welcome") { inclusive = true }
         }

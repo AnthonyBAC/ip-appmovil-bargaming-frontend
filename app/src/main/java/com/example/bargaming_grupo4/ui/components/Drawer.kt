@@ -1,10 +1,13 @@
 package com.example.bargaming_grupo4.ui.components
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import com.example.bargaming_grupo4.ui.theme.*
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
@@ -12,6 +15,9 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+
 data class DrawerItem(
     val label: String,
     val icon: ImageVector,
@@ -25,16 +31,43 @@ fun AppDrawer(
     modifier: Modifier = Modifier
 ) {
     ModalDrawerSheet(
-        modifier = modifier
+        modifier = modifier,
+        drawerContainerColor = BgPrimary,
+        drawerContentColor = WhiteVariant
     ) {
+        Text(
+            text = "BarGaming",
+            style = MaterialTheme.typography.headlineSmall.copy(
+                color = WhiteVariant,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(16.dp)
+        )
+
         items.forEach { item ->
             NavigationDrawerItem(
-                label = { Text(item.label) },
+                label = {
+                    Text(
+                        item.label,
+                        color = WhiteVariant
+                    )
+                },
                 selected = false,
                 onClick = item.onClick,
-                icon = { Icon(item.icon, contentDescription = item.label) },
-                modifier = Modifier,
-                colors = NavigationDrawerItemDefaults.colors()
+                icon = {
+                    Icon(
+                        item.icon,
+                        contentDescription = item.label,
+                        tint = WhiteVariant
+                    )
+                },
+                colors = NavigationDrawerItemDefaults.colors(
+                    selectedContainerColor = PinkButton,
+                    unselectedContainerColor = BgPrimary,
+                    unselectedIconColor = NeonAccent,
+                    selectedTextColor = WhiteHover,
+                    unselectedTextColor = WhiteVariant
+                )
             )
         }
     }

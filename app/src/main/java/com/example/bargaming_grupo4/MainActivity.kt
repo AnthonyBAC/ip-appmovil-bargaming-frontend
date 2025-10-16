@@ -16,7 +16,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BarGaming_Grupo4Theme {
-                MyApp() // Aquí ya no necesitas pasar windowSizeClass
+                // LLama MyApp - aqui inicia todp -
+                MyApp()
             }
         }
     }
