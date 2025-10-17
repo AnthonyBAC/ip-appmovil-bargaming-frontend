@@ -12,4 +12,4 @@ data class Usuario (
 )
 enum class Rol {
                CLIENTE, VENDEDOR, ADMIN
-} // Se crea clase enum para los distintos roles del usuario
+}
