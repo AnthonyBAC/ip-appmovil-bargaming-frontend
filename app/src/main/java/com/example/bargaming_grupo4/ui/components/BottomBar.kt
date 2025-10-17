@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
@@ -32,7 +33,7 @@ fun AppBottomBar(
     onHome: () -> Unit,
     onLogin: () -> Unit,
     onRegister: () -> Unit,
-    onMenuClick: () -> Unit
+    onAccount: () -> Unit
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
 
@@ -77,14 +78,15 @@ fun AppBottomBar(
                 }
             )
 
-            IconButton(onClick = onMenuClick) {
-                Icon(
-                    Icons.Filled.Menu,
-                    contentDescription = "Menú",
-                    tint = WhiteVariant,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
+            BarGamingNavButton(
+                icon = Icons.Filled.AccountCircle,
+                contentDescription = "Account",
+                isSelected = selectedIndex == 3,
+                onClick = {
+                    selectedIndex = 3
+                    onAccount()
+                }
+            )
         }
     }
 }

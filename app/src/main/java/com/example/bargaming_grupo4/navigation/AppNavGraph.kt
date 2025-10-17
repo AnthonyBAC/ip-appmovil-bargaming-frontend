@@ -8,17 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import kotlinx.coroutines.launch
-
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
-import com.example.bargaming_grupo4.ui.components.AppDrawer
-import com.example.bargaming_grupo4.ui.components.defaultDrawerItems
 import com.example.bargaming_grupo4.ui.screens.HomeScreen
 import com.example.bargaming_grupo4.ui.screens.LoginScreen
 import com.example.bargaming_grupo4.ui.screens.RegisterScreen
@@ -26,8 +21,8 @@ import com.example.bargaming_grupo4.ui.screens.WelcomeScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
+    var isLoggedIn by remember { mutableStateOf(false) }
+
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -36,45 +31,24 @@ fun AppNavGraph(navController: NavHostController) {
     val goLogin: () -> Unit = { navController.navigate(Route.Login.path) }
     val goRegister: () -> Unit = { navController.navigate(Route.Register.path) }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            AppDrawer(
-                currentRoute = null,
-                items = defaultDrawerItems(
-                    onHome = {
-                        scope.launch { drawerState.close() }
-                        goHome()
-                    },
-                    onLogin = {
-                        scope.launch { drawerState.close() }
-                        goLogin()
-                    },
-                    onRegister = {
-                        scope.launch { drawerState.close() }
-                        goRegister()
-                    }
-                )
-            )
-        }
-    ) {
-        Scaffold(
+
+    Scaffold(
             bottomBar = {
-                if (currentRoute != Route.Welcome.path &&
-                    currentRoute != Route.Login.path &&
-                    currentRoute != Route.Register.path
-                ) {
+                if (currentRoute != Route.Welcome.path) {
                     AppBottomBar(
                         onHome = goHome,
                         onLogin = goLogin,
                         onRegister = goRegister,
-                        onMenuClick = {
-                            scope.launch {
-                                drawerState.open()
+                        onAccount = {
+                            if (isLoggedIn) {
+                                // TODO: más adelante: ir a la pantalla de cuenta
+                                // navController.navigate(Route.Account.path)
+                            } else {
+                                navController.navigate(Route.Login.path)
                             }
                         }
-
                     )
+
                 }
             }
         ) { innerPadding ->
@@ -92,12 +66,18 @@ fun AppNavGraph(navController: NavHostController) {
                         onGoRegister = goRegister
                     )
                 }
+
+
                 composable(Route.Login.path) {
                     LoginScreen(
-                        onLoginOk = goHome,
+                        onLoginOk = {
+                            isLoggedIn = true
+                            goHome()
+                        },
                         onGoRegister = goRegister
                     )
                 }
+
                 composable(Route.Register.path) {
                     RegisterScreen(
                         onRegistered = goLogin,
@@ -106,5 +86,5 @@ fun AppNavGraph(navController: NavHostController) {
                 }
             }
         }
-    }
+
 }
