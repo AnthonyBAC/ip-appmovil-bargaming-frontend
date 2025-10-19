@@ -16,6 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
 import com.example.bargaming_grupo4.ui.screens.HomeScreen
 import com.example.bargaming_grupo4.ui.screens.LoginScreen
+import com.example.bargaming_grupo4.ui.screens.NosotrosScreen
 import com.example.bargaming_grupo4.ui.screens.RegisterScreen
 import com.example.bargaming_grupo4.ui.screens.WelcomeScreen
 
@@ -62,8 +63,7 @@ fun AppNavGraph(navController: NavHostController) {
                 }
                 composable(Route.Home.path) {
                     HomeScreen(
-                        onGoLogin = goLogin,
-                        onGoRegister = goRegister
+                        navController
                     )
                 }
 
@@ -83,6 +83,10 @@ fun AppNavGraph(navController: NavHostController) {
                         onRegistered = goLogin,
                         onGoLogin = goLogin
                     )
+                }
+
+                composable(Route.Nosotros.path) {
+                    NosotrosScreen()
                 }
             }
         }
