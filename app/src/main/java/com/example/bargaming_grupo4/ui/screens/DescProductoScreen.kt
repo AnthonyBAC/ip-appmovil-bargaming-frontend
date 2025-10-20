@@ -42,8 +42,7 @@ fun DescProductoScreen(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item {
+        ) {            item {
                 AppLogo(
                     Modifier
                         .size(80.dp)
