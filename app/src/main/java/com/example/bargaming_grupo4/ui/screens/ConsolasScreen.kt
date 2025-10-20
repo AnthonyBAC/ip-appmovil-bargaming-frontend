@@ -2,6 +2,8 @@ package com.example.bargaming_grupo4.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,67 +29,71 @@ import com.example.bargaming_grupo4.ui.theme.GradientMain
 fun ConsolasScreen(
     onBuy: () -> Unit
 ) {
-    LazyColumn(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .background(GradientMain),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .background(GradientMain)
     ) {
-        item {
-            AppLogo(
-                Modifier
-                    .size(80.dp)
-                    .padding(start = 8.dp)
-            )
-        }
-        item {
-            Slider3Productos(
-                R.drawable.playstation5,
-                R.drawable.play5_2,
-                R.drawable.play5_3
-            )
-        }
-        item {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
-            ) {
-                Text(
-                    text = "1TB / Digital Edition / 2 Mandos",
-                    Modifier.padding(8.dp),
-                    fontWeight = FontWeight.Bold
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                AppLogo(
+                    Modifier
+                        .size(80.dp)
+                        .padding(start = 8.dp)
                 )
             }
-        }
-        item {
-            CajaTexto(
-                "Descripción",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            )
-        }
-        item {
-            CajaTexto(
-                "Características",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            )
-        }
-
-        item {
-            Row(
-                Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = onBuy,
-                    Modifier.weight(1f)
+            item {
+                Slider3Productos(
+                    R.drawable.playstation5,
+                    R.drawable.play5_2,
+                    R.drawable.play5_3
+                )
+            }
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
                 ) {
                     Text(
-                        "Comprar"
+                        text = "1TB / Digital Edition / 2 Mandos",
+                        Modifier.padding(8.dp),
+                        fontWeight = FontWeight.Bold
                     )
+                }
+            }
+            item {
+                CajaTexto(
+                    "Descripción",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                )
+            }
+            item {
+                CajaTexto(
+                    "Características",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                )
+            }
+
+            item {
+                Row(
+                    Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = onBuy,
+                        Modifier.weight(1f)
+                    ) {
+                        Text(
+                            "Comprar"
+                        )
+                    }
                 }
             }
         }
