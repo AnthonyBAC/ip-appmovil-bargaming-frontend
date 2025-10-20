@@ -14,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
+import com.example.bargaming_grupo4.ui.screens.ConsolasScreen
+import com.example.bargaming_grupo4.ui.screens.DescProductoScreen
 import com.example.bargaming_grupo4.ui.screens.HomeScreen
 import com.example.bargaming_grupo4.ui.screens.LoginScreen
 import com.example.bargaming_grupo4.ui.screens.NosotrosScreen
@@ -87,6 +89,18 @@ fun AppNavGraph(navController: NavHostController) {
 
                 composable(Route.Nosotros.path) {
                     NosotrosScreen()
+                }
+
+                composable(Route.Descripcion.path) {
+                    DescProductoScreen(
+                        goHome
+                    )
+                }
+
+                composable(Route.Consolas.path) {
+                    ConsolasScreen(
+                        goHome
+                    )
                 }
             }
         }

@@ -71,9 +71,9 @@ fun NosotrosScreen(
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = "Una empresa de gamers para gamers. Porque sabemos lo que necesitas y para qué lo necesitas. Cada producto de nuestra tienda se convierte en el deseo de muchos gamers debido a su gran calidad y, tanto vendedor como comprador, se sienten cómodos con la ayuda que ofrecemos como comunidad.",
+                    text = "Una empresa de gamers para gamers. Porque sabemos lo que necesitas y para qué lo necesitas. Cada producto de nuestra tienda se convierte en el deseo de muchos jugadores debido a su gran calidad y, tanto vendedor como comprador, se sienten cómodos con la ayuda que ofrecemos como comunidad.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.DarkGray,
+                    color = Color.Gray,
                     modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
                 )
 
@@ -85,7 +85,7 @@ fun NosotrosScreen(
                 Text(
                     text = "Desde sus inicios, nuestra empresa se ha dedicado a ofrecer productos de calidad. A lo largo de los años, hemos crecido gracias al compromiso con nuestros clientes.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.DarkGray,
+                    color = Color.Gray,
                     modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
                 )
 
@@ -97,7 +97,7 @@ fun NosotrosScreen(
                 Text(
                     text = "Proveer soluciones tecnológicas innovadoras que mejoren la vida de las personas y promuevan el desarrollo sostenible.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.DarkGray,
+                    color = Color.Gray,
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }

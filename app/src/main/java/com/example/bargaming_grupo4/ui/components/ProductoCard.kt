@@ -22,7 +22,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ProductoCard(
     nombre: String,
-    imagenResId: Int
+    imagenResId: Int,
+    desc: String
 ) {
     Card(
         modifier = Modifier
@@ -48,7 +49,7 @@ fun ProductoCard(
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
             Text(
-                text = "Texto Detalles",
+                text = desc,
                 color = Color.Gray,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
             )
