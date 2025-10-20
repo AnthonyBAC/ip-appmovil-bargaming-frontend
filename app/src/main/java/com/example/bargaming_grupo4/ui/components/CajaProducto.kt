@@ -16,15 +16,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.bargaming_grupo4.R
+import androidx.navigation.NavController
 
 @Composable
-fun SeccionConsolas(
-    // agregar ruta screen seccion consolas
+fun CajaProducto(
+    imagen: Int,
+    contentDesc: String,
+    titulo2: String,
+    titulo1: String,
+    navController: NavController,
+    route: String,
+    buttonText: String
 ) {
     Card(
         modifier = Modifier
@@ -35,8 +42,8 @@ fun SeccionConsolas(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Image(
-                painter = painterResource(R.drawable.playstation5),
-                contentDescription = "Playstation 5",
+                painter = painterResource(imagen),
+                contentDescription = contentDesc,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -44,13 +51,18 @@ fun SeccionConsolas(
                     .clip(RoundedCornerShape(4.dp))
             )
             Text(
-                text = "¡Revisa lo mejor en Consolas!",
+                text = titulo2,
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.Gray
+            )
+            Text(
+                text = titulo1,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { /* acción */ }) {
-                Text("Ver más consolas")
+            Button(onClick = { navController.navigate(route) }) {
+                Text(buttonText)
             }
         }
     }

@@ -17,15 +17,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.bargaming_grupo4.R
 
 @Composable
-fun SliderProductosNuevos(
+fun Slider3Productos(
+    imagen1: Int,
+    imagen2: Int,
+    imagen3: Int
 ) {
     val imagenes = listOf(
-        R.drawable.ryzen5600,
-        R.drawable.i9_14900kf,
-        R.drawable.pc_gamer
+        imagen1,
+        imagen2,
+        imagen3
     )
 
     Card(

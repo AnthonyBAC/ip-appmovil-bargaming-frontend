@@ -9,27 +9,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.bargaming_grupo4.R
 
 @Composable
-fun SeccionProductosSugeridos() {
+fun CajaLista3Productos(
+    title: String,
+    producto1: String,
+    producto2: String,
+    producto3: String,
+    imagenProducto1: Int,
+    imagenProducto2: Int,
+    imagenProducto3: Int,
+    desc1: String,
+    desc2: String,
+    desc3: String
+) {
     Column {
         Text(
-            text = "Productos Sugeridos",
+            text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
         val productos = listOf(
-            Pair("Joystick", R.drawable.joystick),
-            Pair("Monitor 144", R.drawable.monitor144),
-            Pair("Notebook", R.drawable.notebook)
+            Triple(producto1, imagenProducto1, desc1),
+            Triple(producto2, imagenProducto2, desc2),
+            Triple(producto3, imagenProducto3, desc3)
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            productos.forEach { (nombre, imagenResId) ->
-                ProductoCard(nombre = nombre, imagenResId = imagenResId)
+            productos.forEach { (nombre, imagenResId, desc) ->
+                ProductoCard(nombre = nombre, imagenResId = imagenResId, desc = desc)
             }
         }
     }

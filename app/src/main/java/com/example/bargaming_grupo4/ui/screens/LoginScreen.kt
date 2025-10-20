@@ -20,8 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import com.example.bargaming_grupo4.model.Usuario
 import androidx.compose.ui.unit.dp
 import com.example.bargaming_grupo4.ui.components.AppLogo
 import com.example.bargaming_grupo4.ui.components.AppTextField
