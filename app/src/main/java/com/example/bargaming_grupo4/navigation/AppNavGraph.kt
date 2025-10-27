@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
 import com.example.bargaming_grupo4.ui.screens.*
 import com.example.bargaming_grupo4.utils.SessionManager
+import com.example.bargaming_grupo4.viewmodel.ProductViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -30,6 +32,7 @@ fun AppNavGraph(navController: NavHostController) {
         isLoggedIn = token != null
     }
 
+    val productViewModel: ProductViewModel = viewModel()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -78,7 +81,7 @@ fun AppNavGraph(navController: NavHostController) {
             }
 
             composable(Route.Home.path) {
-                HomeScreen(navController)
+                HomeScreen(productViewModel, navController)
             }
 
             composable(Route.Login.path) {
@@ -103,13 +106,17 @@ fun AppNavGraph(navController: NavHostController) {
                 NosotrosScreen()
             }
 
-            composable(Route.Descripcion.path) {
-                DescProductoScreen(goHome)
+            composable("${Route.Descripcion.path}/{productId}") { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("productId")?.toLongOrNull()
+                if (id != null) {
+                    DescProductoScreen(
+                        productId = id,
+                        navController = navController,
+                        onBuy = { navController.navigate(Route.Home.path) }
+                    )
+                }
             }
 
-            composable(Route.Consolas.path) {
-                ConsolasScreen(goHome)
-            }
         }
 
     }

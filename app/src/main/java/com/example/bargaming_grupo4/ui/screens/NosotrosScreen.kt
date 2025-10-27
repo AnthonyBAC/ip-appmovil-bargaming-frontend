@@ -103,7 +103,7 @@ fun NosotrosScreen(
             }
         }
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(16.dp))
 
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,

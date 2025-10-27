@@ -1,5 +1,5 @@
 package com.example.bargaming_grupo4.data.local.user
-
+/*
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -14,4 +14,4 @@ data class UsersEntity(
     val direccion: String,
 
     val password: String
-)
+)*/
