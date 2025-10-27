@@ -71,18 +71,13 @@ fun AppBottomBar(
                 }
             )
 
-            //  Aquí controlamos si el usuario está logueado
             BarGamingNavButton(
                 icon = Icons.Filled.AccountCircle,
                 contentDescription = if (isLoggedIn) "Cerrar sesión" else "Cuenta",
                 isSelected = selectedIndex == 3,
                 onClick = {
                     selectedIndex = 3
-                    if (isLoggedIn) {
-                        onLogout()
-                    } else {
-                        onAccount()
-                    }
+                    onAccount()
                 }
             )
         }

@@ -1,6 +1,5 @@
 package com.example.bargaming_grupo4.ui.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -16,6 +15,7 @@ import com.example.bargaming_grupo4.ui.components.AppTextField
 import com.example.bargaming_grupo4.ui.theme.GradientMain
 import com.example.bargaming_grupo4.viewmodel.LoginViewModel
 import com.example.bargaming_grupo4.viewmodel.LoginViewModelFactory
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -23,7 +23,6 @@ fun LoginScreen(
     onLoginOk: () -> Unit,
     onGoRegister: () -> Unit,
     snackbarHostState: SnackbarHostState
-
 ) {
     val context = LocalContext.current
     val userPrefs = remember { UserPreferences(context) }
@@ -33,22 +32,22 @@ fun LoginScreen(
 
     var email by remember { mutableStateOf("") }
     var contrasenia by remember { mutableStateOf("") }
-    val username by userPrefs.userName.collectAsState(initial = null)
-
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val loginOk by viewModel.loginOk.collectAsState()
-    val isLoggedIn by userPrefs.isLoggedIn.collectAsState(initial = false)
 
-    // Efectos de login o error
+    var isNavigating by remember { mutableStateOf(false) }
+
     LaunchedEffect(loginOk, errorMessage) {
         if (loginOk) {
-            Toast.makeText(context, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show()
-            onLoginOk()
+            isNavigating = true // activa el loader antes de navegar
+            snackbarHostState.showSnackbar("Inicio de sesión correcto")
+            delay(800) // espera visual antes de navegar
+            onLoginOk() // navega al perfil
+            delay(400) // mantiene loader un poco más para evitar salto
+            isNavigating = false
         } else if (errorMessage != null) {
-            scope.launch {
-                snackbarHostState.showSnackbar(errorMessage ?: "Error desconocido")
-            }
+            snackbarHostState.showSnackbar(errorMessage ?: "Error desconocido")
         }
     }
 
@@ -59,52 +58,32 @@ fun LoginScreen(
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            AppLogo()
-
-            // Campos de texto
-            AppTextField(value = email, onValueChange = { email = it }, label = "Correo electrónico")
-            Spacer(Modifier.height(12.dp))
-            AppTextField(value = contrasenia, onValueChange = { contrasenia = it }, label = "Contraseña", isPassword = true)
-
-            Spacer(Modifier.height(20.dp))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(
-                    onClick = { viewModel.loginUser(email, contrasenia) },
-                    enabled = !isLoading
-                ) {
-                    Text(if (isLoading) "Cargando..." else "Login")
-                }
-
-                OutlinedButton(onClick = onGoRegister) {
-                    Text("Regístrate")
-                }
-            }
-
-            if (isLoggedIn) {
-                Spacer(Modifier.height(30.dp))
-                Button(
-                    onClick = {
-                        Toast.makeText(context, "Sesión activa como ${username ?: "usuario"} ✅", Toast.LENGTH_SHORT).show()
+        if (isLoading || isNavigating) {
+            CircularProgressIndicator()
+        } else {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                AppLogo()
+                AppTextField(value = email, onValueChange = { email = it }, label = "Correo electrónico")
+                Spacer(Modifier.height(12.dp))
+                AppTextField(
+                    value = contrasenia,
+                    onValueChange = { contrasenia = it },
+                    label = "Contraseña",
+                    isPassword = true
+                )
+                Spacer(Modifier.height(20.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Button(
+                        onClick = { viewModel.loginUser(email, contrasenia) },
+                        enabled = !isLoading && !isNavigating
+                    ) {
+                        Text(if (isLoading) "Cargando..." else "Login")
                     }
-                ) {
-                    Text("Sesión activa como ${username ?: "usuario"}")
-                }
-
-                Spacer(Modifier.height(10.dp))
-                OutlinedButton(onClick = {
-                    scope.launch {
-                        viewModel.logout()
-                        Toast.makeText(context, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+                    OutlinedButton(onClick = onGoRegister) {
+                        Text("Regístrate")
                     }
-                }) {
-                    Text("Cerrar sesión")
                 }
             }
         }
     }
-
 }

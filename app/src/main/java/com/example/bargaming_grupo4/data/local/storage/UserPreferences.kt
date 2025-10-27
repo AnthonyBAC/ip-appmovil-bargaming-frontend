@@ -12,33 +12,28 @@ val Context.dataStore by preferencesDataStore("user_prefs")
 
 class UserPreferences(private val context: Context) {
 
-    //  Claves de preferencias
     private val usernameKey = stringPreferencesKey("user_name")
     private val isLoggedInKey = booleanPreferencesKey("is_logged_in")
     private val tokenKey = stringPreferencesKey("jwt_token")
 
-    //  Guardar el estado de sesión
     suspend fun setLoggedIn(value: Boolean) {
         context.dataStore.edit { prefs ->
             prefs[isLoggedInKey] = value
         }
     }
 
-    //  Guardar el token JWT
     suspend fun saveToken(token: String) {
         context.dataStore.edit { prefs ->
             prefs[tokenKey] = token
         }
     }
 
-    //  Guardar nombre de usuario
     suspend fun saveUserName(username: String) {
         context.dataStore.edit { prefs ->
             prefs[usernameKey] = username
         }
     }
 
-    //  Limpiar la sesión (logout)
     suspend fun clearSession() {
         context.dataStore.edit { prefs ->
             prefs.remove(isLoggedInKey)
@@ -46,7 +41,6 @@ class UserPreferences(private val context: Context) {
             prefs.remove(usernameKey)
         }
     }
-
 
     val userName: Flow<String?> = context.dataStore.data.map { prefs ->
         prefs[usernameKey]

@@ -105,7 +105,7 @@ fun HomeScreen(viewModel: ProductViewModel = viewModel(), navController: NavCont
                                 .clickable { navController.navigate(Route.Nosotros.path) }
                         )
                         Text(
-                            text = "Nosotros",
+                            text = "",
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.SemiBold
                         )
