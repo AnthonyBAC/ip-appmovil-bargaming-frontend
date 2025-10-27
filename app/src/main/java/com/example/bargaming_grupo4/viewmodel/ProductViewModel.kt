@@ -2,7 +2,6 @@ package com.example.bargaming_grupo4.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bargaming_grupo4.data.ProductRepository
 import com.example.bargaming_grupo4.model.Product
 import kotlinx.coroutines.flow.MutableStateFlow
