@@ -28,7 +28,6 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var contrasenia by remember { mutableStateOf("") }
 
-    // Estado de carga (opcional)
     var isLoading by remember { mutableStateOf(false) }
 
     Box(

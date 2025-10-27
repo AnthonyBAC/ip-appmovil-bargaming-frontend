@@ -18,13 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun RegisterScreen(
-    onRegistered: () -> Unit, // Acción para ir a Login
-    onGoLogin: () -> Unit     // Acción alternativa a Login
+    onRegistered: () -> Unit,
+
 ) {
-    val bg = MaterialTheme.colorScheme.tertiaryContainer // Fondo único
+
 
     Box(
         modifier = Modifier
