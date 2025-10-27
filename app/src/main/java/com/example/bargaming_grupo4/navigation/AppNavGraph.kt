@@ -98,7 +98,6 @@ fun AppNavGraph(navController: NavHostController) {
             composable(Route.Register.path) {
                 RegisterScreen(
                     onRegistered = goLogin,
-                    onGoLogin = goLogin
                 )
             }
 

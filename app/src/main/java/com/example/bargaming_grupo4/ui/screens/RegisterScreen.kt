@@ -30,7 +30,6 @@ fun RegisterScreen(
     Box(
         modifier = Modifier
             .fillMaxSize() // Ocupa todo
-            .background(bg) // Fondo
             .padding(16.dp), // Margen
         contentAlignment = Alignment.Center // Centro
     ) {
@@ -49,7 +48,6 @@ fun RegisterScreen(
             // Botones con Row para variar la composición
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) { // Espacio entre botones
                 Button(onClick = onRegistered) { Text("Ir a Login") } // Navega a Login
-                OutlinedButton(onClick = onGoLogin) { Text("Volver a Login") } // También a Login
             }
         }
     }
