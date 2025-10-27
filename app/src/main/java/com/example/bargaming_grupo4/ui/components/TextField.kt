@@ -1,28 +1,27 @@
 package com.example.bargaming_grupo4.ui.components
 
+import android.view.KeyEvent
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Color
 import com.example.bargaming_grupo4.ui.theme.PinkButton
 import com.example.bargaming_grupo4.ui.theme.PinkButtonHover
 import com.example.bargaming_grupo4.ui.theme.WhiteVariant
-import java.nio.file.Files.size
 
 @Composable
 fun AppTextField(
@@ -41,23 +40,36 @@ fun AppTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .onKeyEvent { ev ->
+                if (ev.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) true else false
+            },
         textStyle = TextStyle(color = WhiteVariant),
         isError = isError,
         visualTransformation = if (isPassword && !passwordVisible)
             PasswordVisualTransformation()
         else
             VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = keyboardType,
+            imeAction = ImeAction.None
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {}, onNext = {}, onGo = {}, onSearch = {}, onSend = {}
+        ),
         trailingIcon = {
             if (isPassword) {
-                val image = if (passwordVisible)
-                    Icons.Filled.Visibility
-                else
-                    Icons.Filled.VisibilityOff
-
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = image, contentDescription = "Toggle password visibility")
+                    Icon(
+                        imageVector = if (passwordVisible)
+                            Icons.Filled.Visibility
+                        else
+                            Icons.Filled.VisibilityOff,
+                        contentDescription = "Mostrar u ocultar contraseña",
+                        tint = Color.White.copy(alpha = 0.7f) // 👈 Blanco translúcido
+                    )
                 }
             }
         },
@@ -65,11 +77,12 @@ fun AppTextField(
             focusedIndicatorColor = PinkButton,
             unfocusedIndicatorColor = PinkButtonHover,
             errorIndicatorColor = Color.Red,
-            focusedLabelColor = PinkButton,
+            focusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
             cursorColor = PinkButtonHover
         )
-
     )
+
     if (isError && errorMessage != null) {
         Text(
             text = errorMessage,
