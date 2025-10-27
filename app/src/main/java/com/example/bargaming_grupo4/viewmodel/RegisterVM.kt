@@ -6,16 +6,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bargaming_grupo4.data.local.user.UserDao
 import com.example.bargaming_grupo4.model.RegisterRequest
 import com.example.bargaming_grupo4.network.RetrofitClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel(
+    private val userDao: UserDao
+) : ViewModel() {
+
 
     // Estados
-
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -43,16 +46,16 @@ class RegisterViewModel : ViewModel() {
     }
 
     // Validacion contraseña
-    private fun validatePassword(password : String): String? {
+    private fun validatePassword(password: String): String? {
         if (password.isBlank()) return "La contraseña es obligatoria"
         if (password.length < 12) return "Minimo de 12 caracteres"
-        if (!password.any {it.isUpperCase()}) return "Debe incluir almenos una mayuscula"
-        if (!password.any {it.isLowerCase()}) return "Debe incluir alemenos una minuscula"
-        if (!password.any {it.isDigit()}) return "Debe incluir almenos un numero"
-        if (!password.any {it.isLetterOrDigit()}) return "Debe incluir almenos un simbolo"
+        if (!password.any { it.isUpperCase() }) return "Debe incluir almenos una mayuscula"
+        if (!password.any { it.isLowerCase() }) return "Debe incluir alemenos una minuscula"
+        if (!password.any { it.isDigit() }) return "Debe incluir almenos un numero"
+        if (!password.any { it.isLetterOrDigit() }) return "Debe incluir almenos un simbolo"
         if (password.contains(" ")) return "No debe contener espacios"
         return null
-     }1
+    }
 
     // Confirmacion contraseña
     private fun confirmationPassword(password: String, confirm: String): String? {
@@ -61,9 +64,8 @@ class RegisterViewModel : ViewModel() {
     }
 
 
-
     // Funcion Principal
-    fun registerUser(request: RegisterRequest){
+    fun registerUser(request: RegisterRequest) {
 
         // username
         validateUserName(request.username)?.let {
@@ -84,30 +86,47 @@ class RegisterViewModel : ViewModel() {
         }
 
         // confirmacion contraseña
-        confirmationPassword(request.password,request.confirmPassword)?.let {
+        confirmationPassword(request.password, request.confirmPassword)?.let {
             _errorMessage.value = it
             return
         }
 
-       // validaciones completas
-        viewModelScope.launch{
+        // validaciones completas
+        viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             _registerOk.value = false
 
             try {
                 val response = RetrofitClient.authService.registerUser(request)
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     _registerOk.value = true
                 } else {
                     saveUserLocally(request)
 
                 }
 
-            }catch (ex: Exeption){
+            } catch (ex: Exception) {
                 saveUserLocally(request)
             }
         }
 
+    }
+
+    //Guarda localmente
+    private suspend fun saveUserLocally(request: RegisterRequest) {
+        val localUser = com.example.bargaming_grupo4.data.local.user.UsersEntity(
+            username = request.username,
+            email = request.email,
+            phone = "",
+            direccion = "",
+            password = request.password
+        )
+
+        userDao.insertUser(localUser)
+
+        _errorMessage.value = "Usuario guardado localmente"
+        _registerOk.value = true
+        _isLoading.value = false
     }
 }
