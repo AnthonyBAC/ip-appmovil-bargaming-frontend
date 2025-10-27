@@ -11,27 +11,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
 import com.example.bargaming_grupo4.ui.screens.*
-import com.example.bargaming_grupo4.utils.SessionManager
 import com.example.bargaming_grupo4.viewmodel.ProductViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
     val context = LocalContext.current
-    var isLoggedIn by remember { mutableStateOf(false) }
+    val userPrefs = remember { UserPreferences(context) }
+    val isLoggedIn by userPrefs.isLoggedIn.collectAsState(initial = false)
     val scope = rememberCoroutineScope()
-
-    // snackbar global
     val snackbarHostState = remember { SnackbarHostState() }
-
-    // Verificacion de toekn
-    LaunchedEffect(Unit) {
-        val token = SessionManager.getToken(context)
-        isLoggedIn = token != null
-    }
-
     val productViewModel: ProductViewModel = viewModel()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -49,19 +41,10 @@ fun AppNavGraph(navController: NavHostController) {
                     onHome = goHome,
                     onLogin = goLogin,
                     onRegister = goRegister,
-                    onAccount = {
-                        if (isLoggedIn) {
-                            scope.launch {
-                                snackbarHostState.showSnackbar("Ya estás logueado")
-                            }
-                        } else {
-                            navController.navigate(Route.Login.path)
-                        }
-                    },
+                    onAccount = { navController.navigate(Route.AccountEntry.path) },
                     onLogout = {
-                        SessionManager.clearSession(context)
-                        isLoggedIn = false
-                        navController.navigate(Route.Login.path) {
+                        scope.launch { userPrefs.clearSession() }
+                        navController.navigate(Route.Home.path) {
                             popUpTo(Route.Home.path) { inclusive = true }
                         }
                     }
@@ -87,8 +70,10 @@ fun AppNavGraph(navController: NavHostController) {
             composable(Route.Login.path) {
                 LoginScreen(
                     onLoginOk = {
-                        isLoggedIn = true
-                        goHome()
+                        scope.launch { userPrefs.setLoggedIn(true) }
+                        navController.navigate(Route.Profile.path) {
+                            popUpTo(Route.Login.path) { inclusive = true }
+                        }
                     },
                     onGoRegister = goRegister,
                     snackbarHostState = snackbarHostState
@@ -117,7 +102,17 @@ fun AppNavGraph(navController: NavHostController) {
                 }
             }
 
-        }
+            composable(Route.Profile.path) {
+                ProfileScreen(
+                    snackbarHostState = snackbarHostState,
+                    navController = navController
+                )
+            }
 
+
+            composable(Route.AccountEntry.path) {
+                AccountEntryPointScreen(navController)
+            }
+        }
     }
 }
