@@ -29,12 +29,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.bargaming_grupo4.ui.components.AppLogo
 import com.example.bargaming_grupo4.ui.components.CajaTexto
 import com.example.bargaming_grupo4.ui.theme.GradientMain
+import com.example.bargaming_grupo4.ui.utils.formatearCLP
 import com.example.bargaming_grupo4.viewmodel.ProductViewModel
 
 @Composable
@@ -121,6 +123,23 @@ fun DescProductoScreen(
                     "Características",
                     "Características del producto aún no disponibles."
                 )
+            }
+
+            item {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = formatearCLP(product.precio),
+                        modifier = Modifier.padding(8.dp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Yellow,
+                        fontSize = 30.sp
+                    )
+                }
             }
 
             item {
