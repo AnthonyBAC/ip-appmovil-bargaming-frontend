@@ -1,56 +1,142 @@
 package com.example.bargaming_grupo4.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bargaming_grupo4.data.local.database.AppDataBase
+import com.example.bargaming_grupo4.model.RegisterRequest
+import com.example.bargaming_grupo4.ui.components.AppLogo
+import com.example.bargaming_grupo4.ui.components.AppTextField
+import com.example.bargaming_grupo4.ui.theme.GradientMain
+import com.example.bargaming_grupo4.viewmodel.RegisterViewModel
+import com.example.bargaming_grupo4.viewmodel.RegisterViewModelFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
     onRegistered: () -> Unit,
-
+    snackbarHostState: SnackbarHostState
 ) {
+    val context = LocalContext.current
+    val userDao = AppDataBase.getInstance(context).userDao()
+    val factory = remember { RegisterViewModelFactory(userDao) }
+    val viewModel: RegisterViewModel = viewModel(factory = factory)
 
+    var nombre by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize() // Ocupa todo
-            .background(bg) // Fondo
-            .padding(16.dp), // Margen
-        contentAlignment = Alignment.Center // Centro
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) { // Estructura vertical
-            Text(
-                text = "Registro",
-                style = MaterialTheme.typography.headlineSmall // Título
-            )
-            Spacer(Modifier.height(12.dp)) // Separación
-            Text(
-                text = "Pantalla de Registro (demo). Practica navegación con botones.",
-                textAlign = TextAlign.Center // Centra el texto
-            )
-            Spacer(Modifier.height(20.dp)) // Separación
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+    val registerOk by viewModel.registerOk.collectAsState()
 
-            // Botones con Row para variar la composición
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) { // Espacio entre botones
-                Button(onClick = onRegistered) { Text("Ir a Login") } // Navega a Login
-                OutlinedButton(onClick = onGoLogin) { Text("Volver a Login") } // También a Login
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(registerOk, errorMessage) {
+        if (registerOk) {
+            Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
+            onRegistered()
+        } else if (errorMessage != null) {
+            scope.launch {
+                snackbarHostState.showSnackbar(errorMessage ?: "Error desconocido")
             }
         }
     }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(GradientMain)
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                AppLogo()
+
+                // Nombre
+                AppTextField(
+                    value = nombre,
+                    onValueChange = {
+                        nombre = it
+                        viewModel.onUserNameChange(it)
+                    },
+                    label = "Nombre completo"
+                )
+                viewModel.userNameError?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+
+                // Email
+                AppTextField(
+                    value = email,
+                    onValueChange = {
+                        email = it
+                        viewModel.onEmailChange(it)
+                    },
+                    label = "Correo electrónico"
+                )
+                viewModel.emailError?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+
+                // Contraseña
+                AppTextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                        viewModel.onPasswordChange(it)
+                        viewModel.onConfirmPasswordChange(password, confirmPassword)
+                    },
+                    label = "Contraseña",
+                    isPassword = true
+                )
+                viewModel.passwordError?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+
+                // Confirmar contraseña
+                AppTextField(
+                    value = confirmPassword,
+                    onValueChange = {
+                        confirmPassword = it
+                        viewModel.onConfirmPasswordChange(password, it)
+                    },
+                    label = "Confirmar contraseña",
+                    isPassword = true
+                )
+                viewModel.confirmPasswordError?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+
+                Spacer(Modifier.height(20.dp))
+
+                Button(
+                    onClick = {
+                        val request = RegisterRequest(
+                            username = nombre,
+                            email = email,
+                            password = password,
+                            confirmPassword = confirmPassword
+                        )
+                        viewModel.registerUser(request)
+                    },
+                    enabled = !isLoading
+                ) {
+                    Text(if (isLoading) "Registrando..." else "Registrarse")
+                }
+            }
+        }
+
 }
