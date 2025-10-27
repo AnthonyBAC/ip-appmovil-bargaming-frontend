@@ -16,8 +16,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.bargaming_grupo4.model.Product
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
-import com.example.bargaming_grupo4.ui.screens.ConsolasScreen
 import com.example.bargaming_grupo4.ui.screens.DescProductoScreen
 import com.example.bargaming_grupo4.ui.screens.HomeScreen
 import com.example.bargaming_grupo4.ui.screens.LoginScreen
@@ -100,8 +100,8 @@ fun AppNavGraph(navController: NavHostController) {
 
             composable(Route.Register.path) {
                 RegisterScreen(
-                    onRegistered = goLogin,
-                    onGoLogin = goLogin
+                    onRegistered = goLogin
+                    //onGoLogin = goLogin
                 )
             }
 
@@ -109,13 +109,17 @@ fun AppNavGraph(navController: NavHostController) {
                 NosotrosScreen()
             }
 
-            composable(Route.Descripcion.path) {
-                DescProductoScreen(goHome)
+            composable("${Route.Descripcion.path}/{productId}") { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("productId")?.toLongOrNull()
+                if (id != null) {
+                    DescProductoScreen(
+                        productId = id,
+                        navController = navController,
+                        onBuy = { navController.navigate(Route.Home.path) }
+                    )
+                }
             }
 
-            composable(Route.Consolas.path) {
-                ConsolasScreen(goHome)
-            }
         }
     }
 }

@@ -33,4 +33,25 @@ class ProductViewModel(
             }
         }
     }
+
+    private val _productoSeleccionado = MutableStateFlow<Product?>(null)
+    val productoSeleccionado: StateFlow<Product?> = _productoSeleccionado
+
+    fun getProductById(id: Long) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getProductById(id)
+                if (response.isSuccessful) {
+                    println("Producto recibido: ${response.body()}")
+                    _productoSeleccionado.value = response.body()
+                } else {
+                    println("Error API: Código = ${response.code()} | ${response.errorBody()?.string()}")
+                    _error.value = "Error ${response.code()}"
+                }
+            } catch (e: Exception) {
+                _error.value = e.localizedMessage
+            }
+        }
+    }
+
 }

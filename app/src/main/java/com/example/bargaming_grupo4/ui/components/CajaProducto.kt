@@ -25,13 +25,13 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.bargaming_grupo4.R
 import com.example.bargaming_grupo4.model.Product
+import com.example.bargaming_grupo4.navigation.Route
 
 @Composable
 fun CajaProducto(
     titulo1: String,
     product: Product,
     navController: NavController,
-    route: String,
     buttonText: String
 ) {
     Card(
@@ -74,7 +74,7 @@ fun CajaProducto(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { navController.navigate(route) }) {
+            Button(onClick = { navController.navigate("${Route.Descripcion.path}/${product.productId}")  }) {
                 Text(buttonText)
             }
         }

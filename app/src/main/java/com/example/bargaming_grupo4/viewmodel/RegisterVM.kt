@@ -52,7 +52,7 @@ class RegisterViewModel : ViewModel() {
         if (!password.any {it.isLetterOrDigit()}) return "Debe incluir almenos un simbolo"
         if (password.contains(" ")) return "No debe contener espacios"
         return null
-     }1
+     }
 
     // Confirmacion contraseña
     private fun confirmationPassword(password: String, confirm: String): String? {
@@ -94,7 +94,7 @@ class RegisterViewModel : ViewModel() {
             _isLoading.value = true
             _errorMessage.value = null
             _registerOk.value = false
-
+/*
             try {
                 val response = RetrofitClient.authService.registerUser(request)
                 if (response.isSuccessful){
@@ -106,7 +106,7 @@ class RegisterViewModel : ViewModel() {
 
             }catch (ex: Exeption){
                 saveUserLocally(request)
-            }
+            }*/
         }
 
     }

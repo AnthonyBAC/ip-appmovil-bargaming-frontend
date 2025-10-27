@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.bargaming_grupo4.R
 import com.example.bargaming_grupo4.navigation.Route
 import com.example.bargaming_grupo4.ui.components.AppLogo
 import com.example.bargaming_grupo4.ui.components.CajaProducto
@@ -65,7 +64,6 @@ fun HomeScreen(viewModel: ProductViewModel = viewModel(), navController: NavCont
                         titulo1 = "Computadoras",
                         product = producto,
                         navController = navController,
-                        route = Route.Descripcion.path,
                         buttonText = "Ver Detalles"
                     )
                 }
@@ -73,15 +71,8 @@ fun HomeScreen(viewModel: ProductViewModel = viewModel(), navController: NavCont
                 item {
                     CajaLista3Productos(
                         "Productos Sugeridos",
-                        "Joystick",
-                        "Monitor 144",
-                        "Notebook",
-                        R.drawable.joystick,
-                        R.drawable.monitor144,
-                        R.drawable.notebook,
-                        "Joystick inalámbrico XBOX",
-                        "Monitor Gaming 144HZ 1MS",
-                        "Notebook Gamer I9-9900K / NVIDIA 4090"
+                        productos,
+                        navController
                     )
                 }
 
@@ -90,16 +81,14 @@ fun HomeScreen(viewModel: ProductViewModel = viewModel(), navController: NavCont
                         titulo1 = "Consolas",
                         product = producto,
                         navController = navController,
-                        route = Route.Consolas.path,
                         buttonText = "Ver Detalles"
                     )
                 }
 
                 item {
                     Slider3Productos(
-                        R.drawable.ryzen5600,
-                        R.drawable.i9_14900kf,
-                        R.drawable.pc_gamer
+                        productos,
+                        navController
                     )
                 }
 
