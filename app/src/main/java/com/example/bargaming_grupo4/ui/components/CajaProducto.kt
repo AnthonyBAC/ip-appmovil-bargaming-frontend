@@ -22,13 +22,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import com.example.bargaming_grupo4.R
+import com.example.bargaming_grupo4.model.Product
 
 @Composable
 fun CajaProducto(
-    imagen: Int,
-    contentDesc: String,
-    titulo2: String,
     titulo1: String,
+    product: Product,
     navController: NavController,
     route: String,
     buttonText: String
@@ -41,17 +42,29 @@ fun CajaProducto(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Image(
-                painter = painterResource(imagen),
-                contentDescription = contentDesc,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .clip(RoundedCornerShape(4.dp))
-            )
+
+            if (!product.imageUrl.isNullOrEmpty()) {
+                Image(
+                    painter = rememberAsyncImagePainter(product.imageUrl),
+                    contentDescription = product.nombre,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                )
+            } else {
+                Image(
+                    painter = painterResource(R.drawable.logo),
+                    contentDescription = "Imagen no disponible",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                )
+            }
             Text(
-                text = titulo2,
+                text = product.nombre,
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.Gray
             )

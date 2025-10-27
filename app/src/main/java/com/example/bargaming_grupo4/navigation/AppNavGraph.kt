@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
 import com.example.bargaming_grupo4.ui.screens.ConsolasScreen
@@ -24,6 +25,7 @@ import com.example.bargaming_grupo4.ui.screens.NosotrosScreen
 import com.example.bargaming_grupo4.ui.screens.RegisterScreen
 import com.example.bargaming_grupo4.ui.screens.WelcomeScreen
 import com.example.bargaming_grupo4.utils.SessionManager
+import com.example.bargaming_grupo4.viewmodel.ProductViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -38,6 +40,7 @@ fun AppNavGraph(navController: NavHostController) {
         }
     }
 
+    val productViewModel: ProductViewModel = viewModel()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -82,7 +85,7 @@ fun AppNavGraph(navController: NavHostController) {
             }
 
             composable(Route.Home.path) {
-                HomeScreen(navController)
+                HomeScreen(productViewModel, navController)
             }
 
             composable(Route.Login.path) {

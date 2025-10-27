@@ -4,13 +4,21 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://ip-appmovil-bargaming-backend-production.up.railway.app"
 
-    val instance: AuthService by lazy {
-        retrofit2.Retrofit.Builder()
+    private const val BASE_URL = "https://ip-appmovil-bargaming-backend-production.up.railway.app/"
+
+    private val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(AuthService::class.java)
+    }
+
+    val authService: AuthService by lazy {
+        retrofit.create(AuthService::class.java)
+    }
+
+    val productService: ProductService by lazy {
+        retrofit.create(ProductService::class.java)
     }
 }

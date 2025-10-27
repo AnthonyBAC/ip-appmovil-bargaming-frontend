@@ -22,7 +22,7 @@ class LoginViewModel : ViewModel() {
             val request = LoginRequest(email, password)
 
             // Llamar al backend
-            val response = RetrofitClient.instance.login(request)
+            val response = RetrofitClient.authService.login(request)
 
             // Guardar token en SharedPreferences
             SessionManager.saveSession(context, response.token, response.email, response.role)
