@@ -1,5 +1,6 @@
 package com.example.bargaming_grupo4.viewmodel
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bargaming_grupo4.data.local.storage.UserPreferences
@@ -30,8 +31,16 @@ class LoginViewModel(
         _isLoading.value = value
     }
 
+    private fun validateEmail(email: String): String? {
+        if (email.isBlank()) return "El correo es obligatorio"
+        val emailPat = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return if (!emailPat) "Correo inválido" else null
+    }
+
+    private fun password(password: String): String? =
+        if (password.isBlank()) "La contraseña es obligatoria" else null
+
     suspend fun loginUser(email: String, password: String): Boolean {
-        _isLoading.value = true
         _errorMessage.value = null
         _loginOk.value = false
 
@@ -62,8 +71,6 @@ class LoginViewModel(
         } catch (e: Exception) {
             _errorMessage.value = "Error inesperado: ${e.localizedMessage}"
             false
-        } finally {
-            _isLoading.value = false
         }
     }
 
@@ -76,10 +83,15 @@ class LoginViewModel(
         showError: suspend (String) -> Unit
     ) {
         viewModelScope.launch {
-            // activar loader
             setLoading(true)
-
             val ok = loginUser(email, password)
+            val msg = errorMessage.value ?: ""
+            if (!ok && (msg.contains("Correo no registrado", true)
+                        || msg.contains("Contraseña incorrecta", true))) {
+                setLoading(false)
+                showError(msg)
+                return@launch
+            }
 
             if (ok) {
                 showSuccess()
@@ -91,6 +103,7 @@ class LoginViewModel(
             }
         }
     }
+
 
     fun ejecutarLogout(
         setLoggingOut: (Boolean) -> Unit,
@@ -105,8 +118,6 @@ class LoginViewModel(
             delay(400)
             navigateToAccount()
         }
-
-
     }
 
     fun logout() {
@@ -115,6 +126,4 @@ class LoginViewModel(
             _loginOk.value = false
         }
     }
-
-
 }

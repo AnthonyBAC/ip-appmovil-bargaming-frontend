@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.ui.theme.GradientMain
 import com.example.bargaming_grupo4.viewmodel.LoginViewModel
 import com.example.bargaming_grupo4.viewmodel.LoginViewModelFactory
+import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 
 @Composable
 fun ProfileScreen(
@@ -75,11 +75,7 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
-                Text(
-                    text = "Cerrando sesión...",
-                    modifier = Modifier.padding(top = 80.dp),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+
             }
         } else {
             Column(
