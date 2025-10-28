@@ -52,11 +52,6 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 CircularProgressIndicator()
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    text = "Cargando productos...",
-                    color = MaterialTheme.colorScheme.onBackground
-                )
             }
         } else if (error != null) {
             // error

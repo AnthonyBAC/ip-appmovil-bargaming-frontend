@@ -1,25 +1,12 @@
 package com.example.bargaming_grupo4.ui.screens
 
+import android.util.Patterns
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,6 +19,7 @@ import com.example.bargaming_grupo4.ui.components.AppTextField
 import com.example.bargaming_grupo4.ui.theme.GradientMain
 import com.example.bargaming_grupo4.viewmodel.LoginViewModel
 import com.example.bargaming_grupo4.viewmodel.LoginViewModelFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -43,13 +31,23 @@ fun LoginScreen(
     val userPrefs = remember { UserPreferences(context) }
     val factory = remember { LoginViewModelFactory(userPrefs) }
     val viewModel: LoginViewModel = viewModel(factory = factory)
-    rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
     var email by remember { mutableStateOf("") }
     var contrasenia by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
 
+    val scrollState = rememberScrollState()
 
+    // 🔹 Funciones locales de validación
+    fun validateEmail(email: String): String? {
+        if (email.isBlank()) return "El correo es obligatorio"
+        val emailPat = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return if (!emailPat) "Correo inválido" else null
+    }
+
+    fun validatePassword(password: String): String? =
+        if (password.isBlank()) "La contraseña es obligatoria" else null
 
     Box(
         modifier = Modifier
@@ -59,14 +57,15 @@ fun LoginScreen(
         contentAlignment = Alignment.Center
     ) {
         if (isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            CircularProgressIndicator()
         } else {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 AppLogo()
                 Spacer(Modifier.height(12.dp))
 
@@ -90,22 +89,36 @@ fun LoginScreen(
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Button(
                         onClick = {
-                            viewModel.ejecutarLogin(
-                                email = email,
-                                password = contrasenia,
-                                setLoading = { isLoading = it },
-                                showSuccess = {
-                                    snackbarHostState.showSnackbar("Inicio de sesión correcto")
-                                },
-                                navigateToProfile = {
-                                    navController.navigate("profile") {
-                                        popUpTo("account_entry") { inclusive = true }
-                                    }
-                                },
-                                showError = { msg ->
-                                    snackbarHostState.showSnackbar(msg)
+                            // 🔹 Primero validamos antes de llamar al ViewModel
+                            val emailError = validateEmail(email)
+                            val passwordError = validatePassword(contrasenia)
+
+                            when {
+                                emailError != null -> scope.launch {
+                                    snackbarHostState.showSnackbar(emailError)
                                 }
-                            )
+
+                                passwordError != null -> scope.launch {
+                                    snackbarHostState.showSnackbar(passwordError)
+                                }
+
+                                else -> viewModel.ejecutarLogin(
+                                    email = email,
+                                    password = contrasenia,
+                                    setLoading = { isLoading = it },
+                                    showSuccess = {
+                                        snackbarHostState.showSnackbar("Inicio de sesión correcto")
+                                    },
+                                    navigateToProfile = {
+                                        navController.navigate("profile") {
+                                            popUpTo("account_entry") { inclusive = true }
+                                        }
+                                    },
+                                    showError = { msg ->
+                                        snackbarHostState.showSnackbar(msg)
+                                    }
+                                )
+                            }
                         },
                         enabled = !isLoading
                     ) {

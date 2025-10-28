@@ -21,9 +21,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.bargaming_grupo4.data.local.storage.UserPreferences
+import com.example.bargaming_grupo4.ui.utils.uploadProfileImage
+import com.example.bargaming_grupo4.ui.utils.saveBitmapToTempUri
 import com.example.bargaming_grupo4.ui.theme.GradientMain
 import com.example.bargaming_grupo4.viewmodel.LoginViewModel
 import com.example.bargaming_grupo4.viewmodel.LoginViewModelFactory
+import kotlinx.coroutines.launch
+
 
 @Composable
 fun ProfileScreen(
@@ -36,50 +40,59 @@ fun ProfileScreen(
     val viewModel: LoginViewModel = viewModel(factory = factory)
     val scope = rememberCoroutineScope()
 
+    // Estado de usuario
     val username by userPrefs.userName.collectAsState(initial = "Usuario")
     val isLoggedIn by userPrefs.isLoggedIn.collectAsState(initial = false)
+    val profileImageUrl by userPrefs.profileImageUrl.collectAsState(initial = "")
 
+    // Estado local
     var profileImageUri by remember { mutableStateOf<Uri?>(null) }
     var profileBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var showImageOptions by remember { mutableStateOf(false) }
+    var isUploading by remember { mutableStateOf(false) }
     var isLoggingOut by remember { mutableStateOf(false) }
 
-
+    // Abrir galería
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
             profileImageUri = it
             profileBitmap = null
+            scope.launch {
+                isUploading = true
+                uploadProfileImage(context, it, snackbarHostState)
+                isUploading = false
+            }
         }
     }
 
+    // Tomar foto
     val takePhotoLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap: Bitmap? ->
         bitmap?.let {
             profileBitmap = it
             profileImageUri = null
+            scope.launch {
+                isUploading = true
+                val uri = saveBitmapToTempUri(context, it)
+                uploadProfileImage(context, uri, snackbarHostState)
+                isUploading = false
+            }
         }
     }
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(GradientMain)
             .padding(16.dp)
     ) {
-        if (isLoggingOut) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+        if (isLoggingOut || isUploading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
-                Text(
-                    text = "Cerrando sesión...",
-                    modifier = Modifier.padding(top = 80.dp),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
             }
         } else {
             Column(
@@ -94,19 +107,15 @@ fun ProfileScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = username ?: "Usuario",
-                        style = MaterialTheme.typography.headlineSmall
-                    )
+                    Text(text = username ?: "Usuario", style = MaterialTheme.typography.headlineSmall)
+
 
                     Box(
                         modifier = Modifier
                             .size(90.dp)
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .clickable {
-                                showImageOptions = true
-                            },
+                            .clickable { showImageOptions = true },
                         contentAlignment = Alignment.Center
                     ) {
                         when {
@@ -120,7 +129,12 @@ fun ProfileScreen(
                                 contentDescription = "Foto seleccionada",
                                 modifier = Modifier.fillMaxSize().clip(CircleShape)
                             )
-                            else -> Text("📷", style = MaterialTheme.typography.headlineMedium)
+                            profileImageUrl.isNotEmpty() -> Image(
+                                painter = rememberAsyncImagePainter(profileImageUrl),
+                                contentDescription = "Foto remota",
+                                modifier = Modifier.fillMaxSize().clip(CircleShape)
+                            )
+                            else -> Text("-", style = MaterialTheme.typography.headlineMedium)
                         }
                     }
                 }
@@ -134,7 +148,7 @@ fun ProfileScreen(
                         .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Aquí irá el menú del perfil (ej. productos listados, configuración...)")
+                    Text("Aquí irá el menú del perfil (productos, configuración, etc.)")
                 }
 
                 Spacer(Modifier.height(40.dp))
@@ -164,6 +178,7 @@ fun ProfileScreen(
             }
         }
 
+        // Diálogo de opciones
         if (showImageOptions) {
             AlertDialog(
                 onDismissRequest = { showImageOptions = false },
