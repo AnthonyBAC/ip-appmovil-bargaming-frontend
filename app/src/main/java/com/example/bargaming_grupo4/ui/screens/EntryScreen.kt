@@ -20,7 +20,7 @@ fun AccountEntryPointScreen(navController: NavController) {
     var isChecking by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        delay(250)
+        delay(1250)
         val loggedIn = userPrefs.isLoggedIn.first()
         isChecking = false
         if (loggedIn) {

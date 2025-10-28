@@ -24,8 +24,6 @@ import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.ui.theme.GradientMain
 import com.example.bargaming_grupo4.viewmodel.LoginViewModel
 import com.example.bargaming_grupo4.viewmodel.LoginViewModelFactory
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
@@ -45,6 +43,7 @@ fun ProfileScreen(
     var profileBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var showImageOptions by remember { mutableStateOf(false) }
     var isLoggingOut by remember { mutableStateOf(false) }
+
 
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -143,16 +142,17 @@ fun ProfileScreen(
                 if (isLoggedIn) {
                     Button(
                         onClick = {
-                            scope.launch {
-                                isLoggingOut = true
-                                snackbarHostState.showSnackbar("Cerrando sesión...")
-                                delay(300)
-                                viewModel.logout()
-                                isLoggingOut = false
-                                navController.navigate("account_entry") {
-                                    popUpTo("profile") { inclusive = true }
+                            viewModel.ejecutarLogout(
+                                setLoggingOut = { isLoggingOut = it },
+                                showSnackbar = { message ->
+                                    snackbarHostState.showSnackbar(message)
+                                },
+                                navigateToAccount = {
+                                    navController.navigate("account_entry") {
+                                        popUpTo("profile") { inclusive = true }
+                                    }
                                 }
-                            }
+                            )
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer

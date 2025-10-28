@@ -28,7 +28,7 @@ fun AppBottomBar(
     onLogin: () -> Unit,
     onRegister: () -> Unit,
     onAccount: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
 

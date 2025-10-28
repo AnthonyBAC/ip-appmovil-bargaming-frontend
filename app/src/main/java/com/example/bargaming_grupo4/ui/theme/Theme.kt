@@ -12,17 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PinkButton,          // Botones principales
-    onPrimary = WhiteVariant,      // Texto dentro de botones
-    secondary = BgSecondary,       // Contenedores secundarios
-    onSecondary = WhiteVariant,    // Texto sobre fondo secundario
-    background = BgPrimary,        // Fondo general (nav, footer)
-    onBackground = WhiteVariant,   // Texto sobre fondo principal
-    surface = BgGradient,          // Fondos de secciones o cards
-    onSurface = WhiteVariant,      // Texto sobre surface
-    tertiary = NeonAccent          // Color de acento / hover
+    primary = PinkButton,
+    onPrimary = WhiteVariant,
+    secondary = BgSecondary,
+    onSecondary = WhiteVariant,
+    background = BgPrimary,
+    onBackground = WhiteVariant,
+    surface = BgGradient,
+    onSurface = WhiteVariant,
+    tertiary = NeonAccent
 )
-
 @Composable
 fun BarGaming_Grupo4Theme(content: @Composable () -> Unit) {
     MaterialTheme(

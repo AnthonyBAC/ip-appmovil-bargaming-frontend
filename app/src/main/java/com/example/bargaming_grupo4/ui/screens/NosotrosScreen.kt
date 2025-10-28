@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.bargaming_grupo4.R
 import com.example.bargaming_grupo4.ui.components.AppLogo
 import com.example.bargaming_grupo4.ui.components.MiembroEquipo
-import com.example.bargaming_grupo4.R
 
 @Composable
 fun NosotrosScreen(

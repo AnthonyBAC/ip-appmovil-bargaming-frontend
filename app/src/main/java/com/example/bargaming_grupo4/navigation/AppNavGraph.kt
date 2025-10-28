@@ -69,14 +69,9 @@ fun AppNavGraph(navController: NavHostController) {
 
             composable(Route.Login.path) {
                 LoginScreen(
-                    onLoginOk = {
-                        scope.launch { userPrefs.setLoggedIn(true) }
-                        navController.navigate(Route.Profile.path) {
-                            popUpTo(Route.Login.path) { inclusive = true }
-                        }
-                    },
                     onGoRegister = goRegister,
-                    snackbarHostState = snackbarHostState
+                    snackbarHostState = snackbarHostState,
+                    navController = navController
                 )
             }
 
