@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.bargaming_grupo4.R
-import com.example.bargaming_grupo4.model.Product
 
 @Composable
 fun ProductoCard(

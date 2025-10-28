@@ -9,7 +9,6 @@ sealed class Route(val path: String) {
     data object Descripcion : Route("descripcion")
     data object Consolas : Route("consolas")
     data object Profile : Route("profile")
-
     data object AccountEntry : Route("account_entry")
 
 }
