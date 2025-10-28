@@ -3,14 +3,13 @@ package com.example.bargaming_grupo4.ui.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import com.example.bargaming_grupo4.data.local.storage.UserPreferences
+import androidx.compose.material3.SnackbarHostState
+import com.example.bargaming_grupo4.network.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import androidx.compose.material3.SnackbarHostState
-import com.example.bargaming_grupo4.network.RetrofitClient
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -38,24 +37,18 @@ fun saveBitmapToTempUri(context: Context, bitmap: Bitmap): Uri {
 fun CoroutineScope.uploadProfileImage(
     context: Context,
     uri: Uri,
-    userPrefs: UserPreferences,
     snackbarHostState: SnackbarHostState
 ) {
     launch {
         try {
             val part = uriToMultipart(context, uri)
-
             val response = RetrofitClient.authService.uploadProfileImage(part)
 
             if (response.isSuccessful) {
-                val imageUrl = response.body()?.profileImageUrl
-                imageUrl?.let {
-                    userPrefs.saveProfileImageUrl(it)
-                    snackbarHostState.showSnackbar("Imagen subida correctamente ")
-                }
+                snackbarHostState.showSnackbar("Imagen subida correctamente ")
             } else {
                 val errorMsg = response.errorBody()?.string() ?: "Error desconocido"
-                snackbarHostState.showSnackbar("Error al subir: $errorMsg")
+                snackbarHostState.showSnackbar("Error al subir imagen: $errorMsg")
             }
 
         } catch (e: Exception) {

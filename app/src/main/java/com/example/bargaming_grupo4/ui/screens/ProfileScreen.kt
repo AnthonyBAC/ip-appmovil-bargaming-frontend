@@ -61,7 +61,7 @@ fun ProfileScreen(
             profileBitmap = null
             scope.launch {
                 isUploading = true
-                uploadProfileImage(context, it, userPrefs, snackbarHostState)
+                uploadProfileImage(context, it, snackbarHostState)
                 isUploading = false
             }
         }
@@ -77,7 +77,7 @@ fun ProfileScreen(
             scope.launch {
                 isUploading = true
                 val uri = saveBitmapToTempUri(context, it)
-                uploadProfileImage(context, uri, userPrefs, snackbarHostState)
+                uploadProfileImage(context, uri, snackbarHostState)
                 isUploading = false
             }
         }
@@ -134,7 +134,7 @@ fun ProfileScreen(
                                 contentDescription = "Foto remota",
                                 modifier = Modifier.fillMaxSize().clip(CircleShape)
                             )
-                            else -> Text("📷", style = MaterialTheme.typography.headlineMedium)
+                            else -> Text("-", style = MaterialTheme.typography.headlineMedium)
                         }
                     }
                 }
