@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
 import com.example.bargaming_grupo4.ui.screens.*
+import com.example.bargaming_grupo4.utils.SessionManager
 import com.example.bargaming_grupo4.viewmodel.ProductViewModel
 import kotlinx.coroutines.launch
 
@@ -30,7 +31,7 @@ fun AppNavGraph(navController: NavHostController) {
 
     val goHome: () -> Unit = { navController.navigate(Route.Home.path) }
     val goLogin: () -> Unit = { navController.navigate(Route.Login.path) }
-    val goRegister: () -> Unit = { navController.navigate(Route.Register.path) }
+    val goRegister: () -> Unit = { navController.navigate(Route.AdminProductList.path) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -108,6 +109,22 @@ fun AppNavGraph(navController: NavHostController) {
             composable(Route.AccountEntry.path) {
                 AccountEntryPointScreen(navController)
             }
+
+            composable(Route.AdminProductList.path) {
+                ListaProductosScreen(
+                    navController
+                    )
+            }
+
+            composable(Route.AdminUsersList.path) {
+                val token = SessionManager.getToken(context) ?: ""
+
+                ListaUsuariosAdminScreen(
+                    navController = navController,
+                    token = token
+                )
+            }
+
         }
     }
 }
