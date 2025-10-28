@@ -53,4 +53,16 @@ class UserPreferences(private val context: Context) {
     val token: Flow<String?> = context.dataStore.data.map { prefs ->
         prefs[tokenKey]
     }
+
+    val profileImageUrl = context.dataStore.data.map { prefs ->
+        prefs[stringPreferencesKey("profile_image_url")] ?: ""
+    }
+
+    suspend fun saveProfileImageUrl(url: String) {
+        context.dataStore.edit { prefs ->
+            prefs[stringPreferencesKey("profile_image_url")] = url
+        }
+    }
+
 }
+

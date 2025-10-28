@@ -19,8 +19,9 @@ interface AuthService {
     suspend fun registerUser(@Body request: RegisterRequest): Response<Void>
 
     @Multipart
-    @POST("auth/upload-profile")
+    @POST("api/auth/upload-profile")
     suspend fun uploadProfileImage(
         @Part file: MultipartBody.Part
     ): Response<UploadResponse>
+
 }
