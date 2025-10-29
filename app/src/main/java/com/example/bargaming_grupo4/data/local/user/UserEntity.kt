@@ -3,7 +3,7 @@ package com.example.bargaming_grupo4.data.local.user
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName =  "BG_USERS")
+@Entity(tableName = "BG_USERS")
 data class UsersEntity(
     @PrimaryKey(autoGenerate = true)
     val userid: Long = 0L,

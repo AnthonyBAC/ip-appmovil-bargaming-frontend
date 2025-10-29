@@ -1,6 +1,5 @@
 package com.example.bargaming_grupo4.ui.components
 
-import com.example.bargaming_grupo4.ui.theme.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.bargaming_grupo4.ui.theme.BgPrimary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

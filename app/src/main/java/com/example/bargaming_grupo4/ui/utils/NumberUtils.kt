@@ -4,6 +4,6 @@ import java.text.NumberFormat
 import java.util.Locale
 
 fun formatearCLP(valor: Int): String {
-    val formato = NumberFormat.getCurrencyInstance(Locale("es","CL"))
+    val formato = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
     return formato.format(valor)
 }

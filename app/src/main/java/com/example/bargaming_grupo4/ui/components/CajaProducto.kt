@@ -74,7 +74,7 @@ fun CajaProducto(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { navController.navigate("${Route.Descripcion.path}/${product.productId}")  }) {
+            Button(onClick = { navController.navigate("${Route.Descripcion.path}/${product.productId}") }) {
                 Text(buttonText)
             }
         }

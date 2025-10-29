@@ -87,7 +87,8 @@ class LoginViewModel(
             val ok = loginUser(email, password)
             val msg = errorMessage.value ?: ""
             if (!ok && (msg.contains("Correo no registrado", true)
-                        || msg.contains("Contraseña incorrecta", true))) {
+                        || msg.contains("Contraseña incorrecta", true))
+            ) {
                 setLoading(false)
                 showError(msg)
                 return@launch
