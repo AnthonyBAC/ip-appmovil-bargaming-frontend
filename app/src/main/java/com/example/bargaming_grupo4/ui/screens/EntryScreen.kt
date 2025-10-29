@@ -22,8 +22,10 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun AccountEntryPointScreen(navController: NavController) {
     val context = LocalContext.current
+    // Controla instancia
     val userPrefs = remember { UserPreferences(context) }
 
+    // Controla loader
     var isChecking by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {

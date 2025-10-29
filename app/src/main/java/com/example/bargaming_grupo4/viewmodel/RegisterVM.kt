@@ -1,11 +1,14 @@
 package com.example.bargaming_grupo4.viewmodel
 
+import android.app.Application
 import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bargaming_grupo4.data.local.database.AppDataBase
 import com.example.bargaming_grupo4.data.local.user.UserDao
 import com.example.bargaming_grupo4.model.RegisterRequest
 import com.example.bargaming_grupo4.network.RetrofitClient
@@ -14,9 +17,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val userDao: UserDao
-) : ViewModel() {
+    application: Application
+) : AndroidViewModel(application) {
 
+    val userDao: UserDao = AppDataBase.getInstance(application.applicationContext).userDao()
     // Estados principales
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()

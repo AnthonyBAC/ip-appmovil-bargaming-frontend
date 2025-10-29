@@ -50,10 +50,6 @@ class UserPreferences(private val context: Context) {
         prefs[isLoggedInKey] ?: false
     }
 
-    val token: Flow<String?> = context.dataStore.data.map { prefs ->
-        prefs[tokenKey]
-    }
-
     val profileImageUrl = context.dataStore.data.map { prefs ->
         prefs[stringPreferencesKey("profile_image_url")] ?: ""
     }

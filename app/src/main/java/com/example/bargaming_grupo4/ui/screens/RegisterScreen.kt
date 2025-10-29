@@ -1,6 +1,5 @@
 package com.example.bargaming_grupo4.ui.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,16 +25,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.bargaming_grupo4.data.local.database.AppDataBase
 import com.example.bargaming_grupo4.model.RegisterRequest
 import com.example.bargaming_grupo4.ui.components.AppLogo
 import com.example.bargaming_grupo4.ui.components.AppTextField
 import com.example.bargaming_grupo4.ui.theme.GradientMain
 import com.example.bargaming_grupo4.viewmodel.RegisterViewModel
-import com.example.bargaming_grupo4.viewmodel.RegisterViewModelFactory
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,10 +39,7 @@ fun RegisterScreen(
     onRegistered: () -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
-    val context = LocalContext.current
-    val userDao = AppDataBase.getInstance(context).userDao()
-    val factory = remember { RegisterViewModelFactory(userDao) }
-    val viewModel: RegisterViewModel = viewModel(factory = factory)
+    val viewModel: RegisterViewModel = viewModel()
 
     var nombre by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -62,7 +55,7 @@ fun RegisterScreen(
     val scope = rememberCoroutineScope()
     LaunchedEffect(registerOk, errorMessage) {
         if (registerOk) {
-            Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
+            snackbarHostState.showSnackbar("Registro Exitoso")
             onRegistered()
         } else if (errorMessage != null) {
             scope.launch {

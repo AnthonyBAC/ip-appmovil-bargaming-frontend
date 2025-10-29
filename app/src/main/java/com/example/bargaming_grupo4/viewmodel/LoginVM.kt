@@ -1,6 +1,8 @@
 package com.example.bargaming_grupo4.viewmodel
 
+import android.app.Application
 import android.util.Patterns
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bargaming_grupo4.data.local.storage.UserPreferences
@@ -14,30 +16,22 @@ import org.json.JSONObject
 import retrofit2.HttpException
 import java.io.IOException
 
-class LoginViewModel(
-    private val userPrefs: UserPreferences
-) : ViewModel() {
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading = _isLoading.asStateFlow()
+class LoginViewModel(application: Application) : AndroidViewModel(application){
+     val userPrefs = UserPreferences(application.applicationContext)
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
-
     private val _loginOk = MutableStateFlow(false)
     val loginOk = _loginOk.asStateFlow()
 
-    private fun setLoading(value: Boolean) {
-        _isLoading.value = value
-    }
 
-    private fun validateEmail(email: String): String? {
+   fun validateEmail(email: String): String? {
         if (email.isBlank()) return "El correo es obligatorio"
         val emailPat = Patterns.EMAIL_ADDRESS.matcher(email).matches()
         return if (!emailPat) "Correo inválido" else null
     }
 
-    private fun password(password: String): String? =
+   fun validatePassword(password: String): String? =
         if (password.isBlank()) "La contraseña es obligatoria" else null
 
     suspend fun loginUser(email: String, password: String): Boolean {
@@ -116,7 +110,6 @@ class LoginViewModel(
             setLoggingOut(true)
             showSnackbar("Sesión cerrada correctamente...")
             logout()
-            delay(400)
             navigateToAccount()
         }
     }

@@ -15,7 +15,5 @@ class ProductRepository {
         return api.getProductById(id)
     }
 
-    suspend fun deleteProductById(id: Long): Response<Product> {
-        return api.deleteProductById(id)
-    }
+
 }

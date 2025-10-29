@@ -23,22 +23,18 @@ import com.example.bargaming_grupo4.ui.screens.AccountEntryPointScreen
 import com.example.bargaming_grupo4.ui.screens.DescProductoScreen
 import com.example.bargaming_grupo4.ui.screens.HomeScreen
 import com.example.bargaming_grupo4.ui.screens.ListaProductosScreen
-import com.example.bargaming_grupo4.ui.screens.ListaUsuariosAdminScreen
 import com.example.bargaming_grupo4.ui.screens.LoginScreen
 import com.example.bargaming_grupo4.ui.screens.NosotrosScreen
 import com.example.bargaming_grupo4.ui.screens.ProfileScreen
 import com.example.bargaming_grupo4.ui.screens.RegisterScreen
 import com.example.bargaming_grupo4.ui.screens.WelcomeScreen
-import com.example.bargaming_grupo4.utils.SessionManager
 import com.example.bargaming_grupo4.viewmodel.ProductViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
     val context = LocalContext.current
     val userPrefs = remember { UserPreferences(context) }
     val isLoggedIn by userPrefs.isLoggedIn.collectAsState(initial = false)
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val productViewModel: ProductViewModel = viewModel()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -46,7 +42,8 @@ fun AppNavGraph(navController: NavHostController) {
 
     val goHome: () -> Unit = { navController.navigate(Route.Home.path) }
     val goLogin: () -> Unit = { navController.navigate(Route.Login.path) }
-    val goRegister: () -> Unit = { navController.navigate(Route.AdminProductList.path) }
+    val goRegister: () -> Unit = { navController.navigate(Route.Register.path) }
+    val goCarrito :() -> Unit = {navController.navigate(Route.AdminProductList.path)}
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -55,15 +52,9 @@ fun AppNavGraph(navController: NavHostController) {
                 AppBottomBar(
                     isLoggedIn = isLoggedIn,
                     onHome = goHome,
-                    onLogin = goLogin,
-                    onRegister = goRegister,
+                    onCarrito = goCarrito,
                     onAccount = { navController.navigate(Route.AccountEntry.path) },
-                    onLogout = {
-                        scope.launch { userPrefs.clearSession() }
-                        navController.navigate(Route.Home.path) {
-                            popUpTo(Route.Home.path) { inclusive = true }
-                        }
-                    }
+
                 )
             }
         }
@@ -131,14 +122,6 @@ fun AppNavGraph(navController: NavHostController) {
                 )
             }
 
-            composable(Route.AdminUsersList.path) {
-                val token = SessionManager.getToken(context) ?: ""
-
-                ListaUsuariosAdminScreen(
-                    navController = navController,
-                    token = token
-                )
-            }
 
         }
     }
