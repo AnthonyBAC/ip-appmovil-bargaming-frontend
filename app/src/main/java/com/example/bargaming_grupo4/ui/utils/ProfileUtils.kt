@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.material3.SnackbarHostState
+import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.network.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -45,7 +46,15 @@ fun CoroutineScope.uploadProfileImage(
             val response = RetrofitClient.authService.uploadProfileImage(part)
 
             if (response.isSuccessful) {
-                snackbarHostState.showSnackbar("Imagen subida correctamente ")
+                val body = response.body()
+                if (body != null) {
+                    val userPrefs = UserPreferences(context)
+                    userPrefs.saveProfileImageUrl(body.profileImageUrl)
+
+                    snackbarHostState.showSnackbar("Imagen subida correctamente")
+                } else {
+                    snackbarHostState.showSnackbar("Respuesta vacía del servidor")
+                }
             } else {
                 val errorMsg = response.errorBody()?.string() ?: "Error desconocido"
                 snackbarHostState.showSnackbar("Error al subir imagen: $errorMsg")
@@ -56,3 +65,4 @@ fun CoroutineScope.uploadProfileImage(
         }
     }
 }
+
