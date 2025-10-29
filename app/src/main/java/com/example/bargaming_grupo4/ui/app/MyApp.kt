@@ -6,12 +6,11 @@ import androidx.compose.runtime.Composable
 import com.example.bargaming_grupo4.ui.utils.obtenerWindowSizeClass
 
 
-
 // Desicion cual tipo de pantalla ocupara
 @Composable
-fun MyApp(){
+fun MyApp() {
     val windowSize = obtenerWindowSizeClass()
-    when(windowSize.widthSizeClass){
+    when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> CompactApp()
         // ----------------------
         // Estas no se ocuparan aun

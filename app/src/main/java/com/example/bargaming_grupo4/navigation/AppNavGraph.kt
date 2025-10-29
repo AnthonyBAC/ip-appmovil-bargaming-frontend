@@ -2,8 +2,14 @@ package com.example.bargaming_grupo4.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -13,7 +19,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.ui.components.AppBottomBar
-import com.example.bargaming_grupo4.ui.screens.*
+import com.example.bargaming_grupo4.ui.screens.AccountEntryPointScreen
+import com.example.bargaming_grupo4.ui.screens.DescProductoScreen
+import com.example.bargaming_grupo4.ui.screens.HomeScreen
+import com.example.bargaming_grupo4.ui.screens.ListaProductosScreen
+import com.example.bargaming_grupo4.ui.screens.ListaUsuariosAdminScreen
+import com.example.bargaming_grupo4.ui.screens.LoginScreen
+import com.example.bargaming_grupo4.ui.screens.NosotrosScreen
+import com.example.bargaming_grupo4.ui.screens.ProfileScreen
+import com.example.bargaming_grupo4.ui.screens.RegisterScreen
+import com.example.bargaming_grupo4.ui.screens.WelcomeScreen
 import com.example.bargaming_grupo4.utils.SessionManager
 import com.example.bargaming_grupo4.viewmodel.ProductViewModel
 import kotlinx.coroutines.launch
@@ -113,7 +128,7 @@ fun AppNavGraph(navController: NavHostController) {
             composable(Route.AdminProductList.path) {
                 ListaProductosScreen(
                     navController
-                    )
+                )
             }
 
             composable(Route.AdminUsersList.path) {

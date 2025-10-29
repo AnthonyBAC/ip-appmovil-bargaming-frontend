@@ -17,10 +17,13 @@ import retrofit2.http.Part
 interface AuthService {
     @POST("/api/auth/login")
     suspend fun login(@Body request: LoginRequest): LoginResponse
+
     @GET("/api/admin/users")
     suspend fun getAllUsers(@Header("Authorization") token: String): Response<List<Usuario>>
+
     @POST("/api/auth/register")
     suspend fun registerUser(@Body request: RegisterRequest): Response<Void>
+
     @Multipart
     @POST("api/auth/upload-profile")
     suspend fun uploadProfileImage(
