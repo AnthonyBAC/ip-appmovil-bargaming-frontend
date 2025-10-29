@@ -1,28 +1,12 @@
 package com.example.bargaming_grupo4.ui.screens
 
-import android.util.Patterns
+import com.example.bargaming_grupo4.viewmodel.LoginViewModel
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,8 +17,6 @@ import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.ui.components.AppLogo
 import com.example.bargaming_grupo4.ui.components.AppTextField
 import com.example.bargaming_grupo4.ui.theme.GradientMain
-import com.example.bargaming_grupo4.viewmodel.LoginViewModel
-import com.example.bargaming_grupo4.viewmodel.LoginViewModelFactory
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,27 +25,15 @@ fun LoginScreen(
     navController: NavController,
     onGoRegister: () -> Unit
 ) {
-    val context = LocalContext.current
-    val userPrefs = remember { UserPreferences(context) }
-    val factory = remember { LoginViewModelFactory(userPrefs) }
-    val viewModel: LoginViewModel = viewModel(factory = factory)
+    val viewModel: LoginViewModel = viewModel()
     val scope = rememberCoroutineScope()
 
     var email by remember { mutableStateOf("") }
-    var contrasenia by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     var isLoading by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
-
-    // 🔹 Funciones locales de validación
-    fun validateEmail(email: String): String? {
-        if (email.isBlank()) return "El correo es obligatorio"
-        val emailPat = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        return if (!emailPat) "Correo inválido" else null
-    }
-
-    fun validatePassword(password: String): String? =
-        if (password.isBlank()) "La contraseña es obligatoria" else null
 
     Box(
         modifier = Modifier
@@ -94,8 +64,8 @@ fun LoginScreen(
                 Spacer(Modifier.height(12.dp))
 
                 AppTextField(
-                    value = contrasenia,
-                    onValueChange = { contrasenia = it },
+                    value = password,
+                    onValueChange = { password = it },
                     label = "Contraseña",
                     isPassword = true
                 )
@@ -105,22 +75,17 @@ fun LoginScreen(
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Button(
                         onClick = {
-                            // 🔹 Primero validamos antes de llamar al ViewModel
-                            val emailError = validateEmail(email)
-                            val passwordError = validatePassword(contrasenia)
+                            val emailError = viewModel.validateEmail(email)
+                            val passwordError = viewModel.validatePassword(password)
 
-                            when {
-                                emailError != null -> scope.launch {
-                                    snackbarHostState.showSnackbar(emailError)
-                                }
-
-                                passwordError != null -> scope.launch {
-                                    snackbarHostState.showSnackbar(passwordError)
-                                }
-
-                                else -> viewModel.ejecutarLogin(
+                            if (emailError != null) {
+                                scope.launch { snackbarHostState.showSnackbar(emailError) }
+                            } else if (passwordError != null) {
+                                scope.launch { snackbarHostState.showSnackbar(passwordError) }
+                            } else {
+                                viewModel.ejecutarLogin(
                                     email = email,
-                                    password = contrasenia,
+                                    password = password,
                                     setLoading = { isLoading = it },
                                     showSuccess = {
                                         snackbarHostState.showSnackbar("Inicio de sesión correcto")

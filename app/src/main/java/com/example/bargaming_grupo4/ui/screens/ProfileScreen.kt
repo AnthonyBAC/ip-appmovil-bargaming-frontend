@@ -41,14 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.ui.theme.GradientMain
 import com.example.bargaming_grupo4.ui.utils.saveBitmapToTempUri
 import com.example.bargaming_grupo4.ui.utils.uploadProfileImage
 import com.example.bargaming_grupo4.viewmodel.LoginViewModel
-import com.example.bargaming_grupo4.viewmodel.LoginViewModelFactory
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun ProfileScreen(
@@ -56,15 +53,13 @@ fun ProfileScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
-    val userPrefs = remember { UserPreferences(context) }
-    val factory = remember { LoginViewModelFactory(userPrefs) }
-    val viewModel: LoginViewModel = viewModel(factory = factory)
+    val viewModel: LoginViewModel = viewModel()
     val scope = rememberCoroutineScope()
 
     // Estado de usuario
-    val username by userPrefs.userName.collectAsState(initial = "Usuario")
-    val isLoggedIn by userPrefs.isLoggedIn.collectAsState(initial = false)
-    val profileImageUrl by userPrefs.profileImageUrl.collectAsState(initial = "")
+    val username by viewModel.userPrefs.userName.collectAsState(initial = "Usuario")
+    val isLoggedIn by viewModel.userPrefs.isLoggedIn.collectAsState(initial = false)
+    val profileImageUrl by viewModel.userPrefs.profileImageUrl.collectAsState(initial = "")
 
     // Estado local
     var profileImageUri by remember { mutableStateOf<Uri?>(null) }

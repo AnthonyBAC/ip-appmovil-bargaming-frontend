@@ -41,6 +41,7 @@ fun Slider3Productos(
             modifier = Modifier.padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            // cantidad de imagenes a tomar
             items(productos.take(3)) { producto ->
                 val imagen = producto.imageUrl ?: ""
 

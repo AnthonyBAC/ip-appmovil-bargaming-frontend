@@ -66,6 +66,7 @@ fun DescProductoScreen(
         return
     }
 
+    //  !! = nunca es nulo = id producto
     val product = producto!!
 
     Box(
@@ -95,6 +96,7 @@ fun DescProductoScreen(
 
             item {
                 Image(
+                    // Carga de img en urls
                     painter = rememberAsyncImagePainter(model = product.imageUrl),
                     contentDescription = product.nombre,
                     contentScale = ContentScale.Crop,

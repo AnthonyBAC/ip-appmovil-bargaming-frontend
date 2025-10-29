@@ -25,10 +25,9 @@ import com.example.bargaming_grupo4.ui.theme.BgPrimary
 fun AppBottomBar(
     isLoggedIn: Boolean,
     onHome: () -> Unit,
-    onLogin: () -> Unit,
-    onRegister: () -> Unit,
+    onCarrito: () -> Unit,
     onAccount: () -> Unit,
-    onLogout: () -> Unit,
+
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
 
@@ -52,22 +51,12 @@ fun AppBottomBar(
             )
 
             BarGamingNavButton(
-                icon = Icons.Filled.Favorite,
-                contentDescription = "Favoritos",
-                isSelected = selectedIndex == 1,
-                onClick = {
-                    selectedIndex = 1
-                    onLogin()
-                }
-            )
-
-            BarGamingNavButton(
                 icon = Icons.Filled.ShoppingCart,
                 contentDescription = "Carrito",
                 isSelected = selectedIndex == 2,
                 onClick = {
                     selectedIndex = 2
-                    onRegister()
+                    onCarrito()
                 }
             )
 
