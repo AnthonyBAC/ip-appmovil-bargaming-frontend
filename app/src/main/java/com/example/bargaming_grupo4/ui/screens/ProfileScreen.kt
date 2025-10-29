@@ -41,13 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.bargaming_grupo4.data.local.storage.UserPreferences
 import com.example.bargaming_grupo4.ui.theme.GradientMain
 import com.example.bargaming_grupo4.ui.utils.saveBitmapToTempUri
 import com.example.bargaming_grupo4.ui.utils.uploadProfileImage
 import com.example.bargaming_grupo4.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun ProfileScreen(
