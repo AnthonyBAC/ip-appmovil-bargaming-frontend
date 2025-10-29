@@ -1,3 +1,8 @@
+# Integrantes: 
+## Brandon Yañez y Anthony Adasme
+
+---
+
 # BarGaming - Proyecto Android
 
 Aplicación móvil desarrollada con **Kotlin** y **Jetpack Compose** para la gestión de productos, usuarios y compras en el ecosistema BarGaming.
